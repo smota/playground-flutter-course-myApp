@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import './answer.dart';
-import './question.dart';
+
+import 'quiz.dart';
+import 'result.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,22 +17,26 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
 
-  var _questions = [
-    { 'questionText' : 'What\'s your favorite color',
-      'answers' : ['Black', 'Red', 'Green', 'White'],
+  static const _questions = const [
+    {
+      'questionText': 'What\'s your favorite color',
+      'answers': ['Black', 'Red', 'Green', 'White'],
     },
-    { 'questionText' : 'What\'s your favorite animal?', 
-      'answers' : ['Lion', 'Rabbit', 'Snake', 'Elephant'],
+    {
+      'questionText': 'What\'s your favorite animal?',
+      'answers': ['Lion', 'Rabbit', 'Snake', 'Elephant'],
     },
-    { 'questionText' : 'Who is your favorite instructor?',
-      'answers' : ['Sam', 'Sam', 'Sam', 'Sam'],
+    {
+      'questionText': 'Who is your favorite instructor?',
+      'answers': ['Sam', 'Sam', 'Sam', 'Sam'],
     },
   ];
 
   void _answerQuestion() {
     setState(() {
-      _questionIndex =
-          _questionIndex < _questions.length - 1 ? _questionIndex + 1 : 0;
+      _questionIndex = _questionIndex < _questions.length - 1
+          ? _questionIndex + 1
+          : _questionIndex;
     });
     print("Answer selected");
   }
@@ -43,14 +48,12 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('myApp'),
         ),
-        body: Column(
-          children: <Widget>[
-            Question(_questions[_questionIndex]['questionText']),
-            ...(_questions[_questionIndex]['answers'] as List<String>).map((answer){
-              return Answer(_answerQuestion, answer);
-            }).toList(),
-          ],
-        ),
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                questionList: _questions, 
+                answerQuestion: _answerQuestion, 
+                questionIndex: _questionIndex)
+            : Result(),
       ),
     );
   }
